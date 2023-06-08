@@ -20,6 +20,8 @@ const (
 
     LT = "<"
     GT = ">"
+    EQ = "=="
+    NOT_EQ = "!="
 
     // Delimeters
     COMMA = ","
