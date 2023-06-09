@@ -1,6 +1,7 @@
 package repl
 
 import (
+    "io"
     "bufio"
     "fmt"
     "github.com/gray-adeyi/monkey/lexer"
