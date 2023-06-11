@@ -29,7 +29,7 @@ func (p *Parser) nextToken() {
 }
 
 func (p *Parser) ParseProgram() *ast.Program{
-    program := ast.Program{}
+    program := &ast.Program{}
     program.Statements = []ast.Statement{}
 
     for p.currToken.Type != token.EOF {
@@ -48,5 +48,43 @@ func (p *Parser) parseStatement() ast.Statement{
         return p.parseLetStatement()
     default:
         return nil
+    }
+}
+
+func (p *Parser) parseLetStatement() *ast.LetStatement{
+    stmt := &ast.LetStatement{Token: p.currToken}
+
+    if !p.expectPeek(token.IDENT){
+        return nil
+    }
+
+    stmt.Name = &ast.Identifier{Token: p.currToken, Value: p.currToken.Literal}
+
+    if !p.expectPeek(token.ASSIGN){
+        return nil
+    }
+
+    // TODO: We're skipping the expressions until we
+    // encounter a semicolon
+    for !p.currTokenIs(token.SEMICOLON){
+        p.nextToken()
+    }
+    return stmt
+}
+
+func (p *Parser) currTokenIs(t token.TokenType) bool {
+    return p.currToken.Type == t
+}
+
+func (p *Parser) peekTokenIs(t token.TokenType) bool {
+    return p.peekToken.Type == t
+}
+
+func (p *Parser)expectPeek(t token.TokenType) bool {
+    if p.peekTokenIs(t) {
+        p.nextToken()
+        return true
+    } else {
+        return false
     }
 }
