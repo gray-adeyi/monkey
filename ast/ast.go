@@ -1,7 +1,7 @@
 package ast
 
 import (
-    "bytee"
+    "bytes"
     "github.com/gray-adeyi/monkey/token"
 )
 
@@ -99,7 +99,7 @@ func (rs *ReturnStatement) String() string{
     return out.String()
 }
 
-func ExpressionStatement{
+type ExpressionStatement struct{
     Token token.Token // The first token of the expression
     Expression Expression
 }
