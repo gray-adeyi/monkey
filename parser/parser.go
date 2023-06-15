@@ -162,8 +162,9 @@ func (p *Parser) registerInfix(tokenType token.TokenType, fn infixParseFn){
 }
 
 func (p *Parser) parseExpression(procedence int) ast.Expression {
-    prefix := p.prefixParseFns[p.currToken.Type]
+        prefix := p.prefixParseFns[p.currToken.Type]
     if prefix == nil {
+        p.noPrefixParseFnError(p.currToken.Type)
         return nil
     }
     leftExp := prefix()
@@ -187,3 +188,10 @@ func (p *Parser) parseIntegerLiteral() ast.Expression {
     lit.Value = value
     return lit
 }
+
+func (p *Parser) noPrefixParseFnError(t token.TokenType){
+    msg := fmt.Sprintf("no prefix parse function for %s found", t)
+    p.errors = append(p.errors, msg)
+}
+
+
