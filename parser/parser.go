@@ -43,6 +43,8 @@ func New(l *lexer.Lexer) *Parser{
     p.prefixParseFns = make(map[token.TokenType]prefixParseFn)
     p.registerPrefix(token.IDENT, p.parseIdentifier)
     p.registerPrefix(token.INT, p.parseIntegerLiteral)
+    p.registerPrefix(token.BANG, p.parsePrefixExpression)
+    p.registerPrefix(token.MINUS, p.parsePrefixExpression)
 
     // Read two tokens, so currToken and peekToken are both set
     p.nextToken()
@@ -194,4 +196,14 @@ func (p *Parser) noPrefixParseFnError(t token.TokenType){
     p.errors = append(p.errors, msg)
 }
 
+func (p *Parser) parsePrefixExpression() ast.Expression {
+    expression := &ast.PrefixExpression{
+        Token: p.currToken,
+        Operator: p.currToken.Literal,
+    }
 
+    p.nextToken()
+
+    expression.Right = p.parseExpression(PREFIX)
+    return expression
+}
