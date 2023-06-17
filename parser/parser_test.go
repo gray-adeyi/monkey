@@ -246,14 +246,14 @@ func TestParsingInfixExpressions(t *testing.T) {
 
     for _, tt := range infixTests {
         l := lexer.New(tt.input)
-        p := Nee(l)
+        p := New(l)
         program := p.ParseProgram()
         checkParserErrors(t, p)
 
         if len(program.Statements) != 1 {
-            .Fatalf("pogram.Statements does not contain %d statements. oot=%d\n",1, len(program.Statements))
+            t.Fatalf("pogram.Statements does not contain %d statements. oot=%d\n",1, len(program.Statements))
         }
-        stmt, ok := program.Ststements[0].(*ast.ExpressionStatement)
+        stmt, ok := program.Statements[0].(*ast.ExpressionStatement)
         if !ok {
             t.Fatalf("program.Statements[0] is not ast.ExpressionStatement. got=%T", program.Statements[0])
         }
@@ -271,7 +271,7 @@ func TestParsingInfixExpressions(t *testing.T) {
             t.Fatalf("exp.Operator is not %s. got=%s", tt.operator, exp.Operator)
         }
 
-        if !testIntegerLitetal(t, exp.Right, tt.rightValue) {
+        if !testIntegerLiteral(t, exp.Right, tt.rightValue) {
             return
         }
     }
